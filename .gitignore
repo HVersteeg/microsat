@@ -1,0 +1,15 @@
+# Executables
+*.exe
+*.out
+*.app
+
+# Other
+desktop.ini
+.DS_Store
+
+
+# Useless Simulink generated files
+**/slprj/**
+
+# MATLAB temporary files
+**~
