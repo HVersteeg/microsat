@@ -9,27 +9,7 @@ desktop.ini
 
 
 # Useless Simulink generated files
-**/control/**/slprj/_jitprj
-**/control/**/slprj/_sfprj
-**/control/**/slprj/modeladvisor
-**/control/**/slprj/**/*.mat
-**/control/**/slprj/**/*.dmr
-**/control/**/slprj/**/*.txt
-**/control/**/slprj/**/*.tmw
-**/control/**/slprj/**/*.rsp
-**/control/**/slprj/**/*.mk
-**/control/**/slprj/**/*.bat
-**/control/**/slprj/**/*.l
-**/control/**/slprj/ert/**
-!**/control/**/slprj/ert/_sharedutils
-**/control/**/*_ert_rtw/*.mat
-**/control/**/*_ert_rtw/*.dmr
-**/control/**/*_ert_rtw/*.txt
-**/control/**/*_ert_rtw/*.tmw
-**/control/**/*_ert_rtw/*.rsp
-**/control/**/*_ert_rtw/*.mk
-**/control/**/*_ert_rtw/*.bat
-**/control/**/*_ert_rtw/*.l
+**/slprj/**
 
 # MATLAB temporary files
 **~
