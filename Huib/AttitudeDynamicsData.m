@@ -26,4 +26,16 @@ PID_B = struct( ...
     'D', 5      ...
     );
 
-
+%% Euler angle setpoint timeseries
+timeA = [0;
+         50;
+         100;
+         150;
+         200];
+rng(123456); % seed random number generator for always the same 'random' values
+dataA = [0 0 0;
+         45 135 90;
+         40 60  70;
+         randi([-180 180], 1, 3);
+         0 0 0];
+eulerSetpoints = timeseries(dataA, timeA);
