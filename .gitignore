@@ -13,3 +13,5 @@ desktop.ini
 
 # MATLAB temporary files
 **~
+*.autosave
+*.asv
