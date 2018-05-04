@@ -17,3 +17,17 @@ J_sphere = 0.005567928416632;	% [kg*m^2] reaction sphere moment of inertia
 % satellite single axis rotation transfer function
 s = tf('s');
 H = 1 / (J_sat(1)*s^2);
+
+
+%% 3-Axis PID controller gains
+PID_B = struct( ...
+    'P', 2,     ...
+    'I', 0.0002,...
+    'D', 5      ...
+    );
+
+%% Euler angle setpoint timeseries
+timeA = [0];
+rng(123456); % seed random number generator for always the same 'random' values
+dataA = [0 0 0];
+eulerSetpoints = timeseries(dataA, timeA);
