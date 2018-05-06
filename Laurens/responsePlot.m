@@ -1,10 +1,10 @@
-function responsePlot = responsePlot(response_data, time_data, rotmOut)
+function responsePlot(response_data, time_data, rotmOut)
 
     set(0, 'defaultLegendInterpreter','latex');
     set(0, 'defaultAxesTickLabelInterpreter','latex');
     set(0, 'defaultTextInterpreter','latex');
-    
     f = figure(2);
+    f.Color = [1 1 1];
     clf;
     
     norm_data = zeros(size(response_data));
@@ -20,7 +20,8 @@ function responsePlot = responsePlot(response_data, time_data, rotmOut)
         % Normalize data to step response region
         norm_data(:,i) = (1-(response_data(:,i)/response_data(1,i)));
         stepinfo_data = stepinfo(norm_data(:,i),time_data);
-    
+        
+          
     % Defines variables that store their respective parameter value
     % 1 = RiseTime, 2 = SettlingTime, 3 = PeakTime
     % 4 = Peak, 5 = Overshoot perc, 6 = SS error, 7 = Nadir pointing error
@@ -38,55 +39,52 @@ function responsePlot = responsePlot(response_data, time_data, rotmOut)
         hold on
         
     end
+    textString = {...
+                '                   Z-angle | Y-angle | X-angle';...
+        sprintf('Rise time [s]    :  %5.2f  |  %5.2f  |  %5.2f ', performance_data(1,:));...
+        sprintf('Settling time [s]:  %5.2f  |  %5.2f  |  %5.2f ', performance_data(2,:));...
+        sprintf('Peak time [s]    :  %5.2f  |  %5.2f  |  %5.2f ', performance_data(3,:));...
+        sprintf('Peak [-]         :  %5.2f  |  %5.2f  |  %5.2f ', performance_data(4,:));...
+        sprintf('Overshoot [%%]    :  %5.2f  |  %5.2f  |  %5.2f ', performance_data(5,:));...
+        sprintf('St.St. error [-] : %5.4f  | %5.4f  | %5.4f ', performance_data(6,:));...
+                ' ';...
+        sprintf('Nadir pointing error [deg] : %5.2f', performance_data(7,3))};
+    
+    uicontrol(f,...
+                  'FontSize',   14,...
+                  'Units',      'normalized',...
+                  'Style',      'text',...
+                  'String',     textString,...
+                  'FontName',   'FixedWidth',...
+                  'Position',   [2/3 0.4 1/3 0.5],...
+                  'BackgroundColor', [1 1 1])
     
     % Performance graph axis and legend set-up
     axis([0 time_data(end) -0.1 1.5])
     ax.FontSize = 18;
     yticks (-0.1:0.1:1.5)
     xticks (0:1:time_data(end))
-    legend('X','Y','Z');
+    legend('Z','Y','X');
     
     % Plot labels
     xlabel('Time [s]', 'FontSize',16);
     ylabel('Amplitude', 'FontSize',16);
     grid on
             
-    % Create the column and row names in cell arrays 
-    
-    cnames = {'X - Angle','Y - Angle','Z - Angle'};
-    cnames = { ....
-    '<html><center /><font face="verdana" size=4>X - Angle</font></html>', ...
-    '<html><center /><font face="verdana" size=4>Y - Angle</font></html>', ...
-    '<html><center /><font face="verdana" size=4>Z - Angle</font></html>'};
-
-    rnames = {'Rise time [s]','Settling time [s]','Peak time [s]',...
-              'Peak [-]','Overshoot [%]','Steady state error [-]',...
-              'Nadir pointing error [deg]'};
-    
-    % Create the uitable
-    t = uitable(f,'Data',       round(performance_data,2,'significant'),...
-                  'FontSize',   14,...
-                  'ColumnName', cnames,... 
-                  'RowName',    rnames,...
-                  'ColumnWidth',{80},...
-                  'Units',      'normalized',...
-                  'Position',   [2/3 0.4 1/3 0.2]);
-    
     line1 = char(strcat('Response performance'));
     line2 = char(strcat(' '));
     title( {strcat(line1)},'interpreter','latex','FontSize',18)
     
     % Fullsize window
-    set(gcf, 'units','normalized','outerposition',[0 0 1 1]);
+    f.Units = 'normalized';
+    f.OuterPosition = [0 0 1 1];
     
     % Fixes position of table for cleaner look
-    t.Position(3:4) = t.Extent(3:4);
+    % t.Position(3:4) = t.Extent(3:4);
     
     % Save figure as PDF for best quality
     pause(0.1)
     saveFolder = '../Laurens/PlotOutput/ResponsePlot';
     save2pdf(saveFolder,2,600)
     
-    performance_data;
-    round(performance_data,2,'significant');
 end
