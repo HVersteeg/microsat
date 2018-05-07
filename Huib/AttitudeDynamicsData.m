@@ -20,24 +20,50 @@ H = 1 / (J_sat(1)*s^2);
 
 
 %% 3-Axis PID controller gains
-PID_B = struct( ...
+
+% pid gains for MPC + 3-axis pid model
+% Tuned for no overshoot, and max 0.34 Nm torque magnitude
+PID_MPC = struct( ...
+    'P', 1.3,     ...
+    'I', 0.0002,...
+    'D', 3.02      ...
+    );
+
+% pid gains for only PID control
+PID_A = struct( ...
+    'P', 0.2,     ...
+    'I', 0.0002,...
+    'D', 0.5      ...
+    );
+
+% pid gains for NDI model
+PID_NDI = struct( ...
+    'P', 0.086943,...
+    'I', 0.001563,...
+    'D', 0.9084 ...
+    );
+
+% pid gains for axis-angle maneuver
+PID_AA = struct( ...
     'P', 2,     ...
     'I', 0.0002,...
     'D', 5      ...
     );
 
 %% Euler angle setpoint timeseries
-timeA = [0;
-         50;
-         100;
-         150;
-         200;
-         250];
+timeA = [0];
+% timeA = [0;
+%          50;
+%          100;
+%          150;
+%          200;
+%          250];
 rng(123456); % seed random number generator for always the same 'random' values
-dataA = [0 0 0;
-         60 90 180;
-         0 0 0;
-         70 90 270;
-         0 0 0;
-         60 60 60];
+dataA = [0 0 0];
+% dataA = [0 0 0;
+%          60 90 180;
+%          0 0 0;
+%          70 90 270;
+%          0 0 0;
+%          60 60 60];
 eulerSetpoints = timeseries(dataA, timeA);
