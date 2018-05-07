@@ -2,7 +2,7 @@
 load('MPCfile')
 
 % initial conditions
-eulAngles = [30 30 30]*pi/180; % [22.9 11.0 14.1]*pi/180;
+eulAngles = [22.9 11.0 14.1]*pi/180;
 q_zero = eul2quat(eulAngles, 'ZYX'); % start quaternion
 q_zero = [q_zero(2:4), q_zero(1)];
 w_zero = [0 0 0]; % initial angular velocity
