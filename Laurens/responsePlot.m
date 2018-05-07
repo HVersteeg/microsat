@@ -1,8 +1,9 @@
-
-function responsePlot(responseData, rotmOut, omegaRsOut, mechEnergyOut, mechPowerOut);
+% Version 1.0
+function responsePlot(responseData, rotmOut, omegaRsOut, mechEnergyOut, mechPowerOut, torqueOut)
 
     response_data = responseData.Data;
     time_data = responseData.Time;
+    torqueOut.Data = torqueOut.Data*1000;
     
     set(0, 'defaultLegendInterpreter','tex');
     set(0, 'defaultAxesTickLabelInterpreter','tex');
@@ -12,6 +13,8 @@ function responsePlot(responseData, rotmOut, omegaRsOut, mechEnergyOut, mechPowe
     f.Color = [1 1 1];
     clf;
     
+    fontSize = 12;
+
     %% Response plots
     norm_data = zeros(size(response_data));
     performance_data = zeros(5,3);
@@ -19,7 +22,7 @@ function responsePlot(responseData, rotmOut, omegaRsOut, mechEnergyOut, mechPowe
     % Create plots, rsppl = response plot, powpl = power plot,
     % omegapl = omega plot
     rsppl = axes(f, 'Units',            'normalized',...
-                 'OuterPosition',    [0 2/3 2/3 3/10]);
+                 'OuterPosition',    [0 3/4 2/3 2.3/10]);
     
     for i = 1:3
         
@@ -47,46 +50,45 @@ function responsePlot(responseData, rotmOut, omegaRsOut, mechEnergyOut, mechPowe
     
     % Performance graph axis and legend set-up
     axis([0 time_data(end) -0.1 1.5])
-    rsppl.FontSize = 18;
-    yticks (0:0.2:1.5)
-    xticks (0:0.5:time_data(end))
-    legend('Z','Y','X','Location','southeast');
-    
+    rsppl.FontSize = fontSize;
+    yticks (0:0.25:1.5)
+    %xticks (0:0.5:time_data(end))
+    lgd = legend('Z','Y','X','Location','southeast');
+    lgd.FontSize = fontSize-4;    
     
     % Plot labels
-    %xlabel('Time [s]', 'FontSize',16);
-    ylabel('Amplitude', 'FontSize',16);
+    %xlabel('Time [s]', 'FontSize',fontSize);
+    ylabel('Amplitude', 'FontSize',fontSize);
     grid on
             
     line1 = char(strcat('Response performance'));
-    line2 = char(strcat(' '));
-    title( {strcat(line1)},'interpreter','tex','FontSize',18)
+    title( {strcat(line1)},'interpreter','tex','FontSize',fontSize)
     
     %% Power plots
     powpl = axes(f, 'Units',            'normalized',...
-             'OuterPosition',    [0 0.35 2/3 3/10]);
+             'OuterPosition',    [0 2/4 2/3 2.3/10]);
          
-    plot(powpl, time_data, mechPowerOut.Data(:,1), Colour(1), 'LineWidth' ,1.5);
+    plot(powpl, time_data, -mechPowerOut.Data(:,1), Colour(1), 'LineWidth' ,1.5);
     
     % Performance graph axis and legend set-up
-%     axis([0 time_data(end) round((min(mechPowerOut.Data)/100),0)*100 50])
-    powpl.FontSize = 18;
-%     yticks (round((min(mechEnergyOut.Data)/100),0)*100:100:0)
-    xticks (0:0.5:time_data(end))
-    legend('Power','Location','southeast');
+%    axis([0 time_data(end) round((min(mechPowerOut.Data)/100),0)*100 50])
+    powpl.FontSize = fontSize;
+%    yticks (round((min(mechEnergyOut.Data)/100),0)*100:100:0)
+%    xticks (0:0.5:time_data(end))
+    lgd = legend('Power','Location','southeast');
+    lgd.FontSize = fontSize-4;
     
     % Plot labels
-    %xlabel('Time [s]', 'FontSize',16);
-    ylabel('Watt', 'FontSize',16);
+    %xlabel('Time [s]', 'FontSize',fontSize-2);
+    ylabel('Watt', 'FontSize',fontSize);
     grid on
             
     line1 = char(strcat('Reaction sphere power'));
-    line2 = char(strcat(' '));
-    title( {strcat(line1)},'interpreter','tex','FontSize',18)
+    title( {strcat(line1)},'interpreter','tex','FontSize',fontSize)
     
     %% Omega plots
     omegapl = axes(f, 'Units',          'normalized',...
-                 'OuterPosition',    [0 1/30 2/3 3/10]);
+                 'OuterPosition',    [0 1/4 2/3 2.3/10]);
              
     Colour = [ 'b' 'g' 'r'];
     for i = fliplr(1:3)        
@@ -96,20 +98,46 @@ function responsePlot(responseData, rotmOut, omegaRsOut, mechEnergyOut, mechPowe
     
     % Performance graph axis and legend set-up
 %     axis([0 time_data(end) -0.1 1.5])
-    omegapl.FontSize = 18;
+    omegapl.FontSize = fontSize;
 %     yticks (0:0.2:1.5)
-    xticks (0:0.5:time_data(end))
-    legend('Z','Y','X','Location','southeast');
+    %xticks (0:2:time_data(end))
+    lgd = legend('Z','Y','X','Location','southeast');
+    lgd.FontSize = fontSize-4;
     
     % Plot labels
-    xlabel('Time [s]', 'FontSize',16);
-    ylabel('Degrees', 'FontSize',16);
+    %xlabel('Time [s]', 'FontSize',fontSize);
+    ylabel('Rad/s', 'FontSize',fontSize);
     grid on
             
-    line1 = strcat('Reaction sphere relative \omega angles');
-    line2 = char(strcat(' '));
-    title( {strcat(line1)},'interpreter','tex','FontSize',18)
+    line1 = strcat('Reaction sphere relative angular velocity \omega');
+    title( {strcat(line1)},'interpreter','tex','FontSize',fontSize)
+
     
+    %% Torque plots
+    torqpl = axes(f, 'Units',          'normalized',...
+                 'OuterPosition',    [0 0/30 2/3 2.3/10]);
+             
+    Colour = [ 'b' 'g' 'r'];
+    for i = fliplr(1:3)        
+        plot(torqpl, time_data, torqueOut.Data(:,i), Colour(i), 'LineWidth' ,1.5);
+        hold on
+    end
+    
+    % Performance graph axis and legend set-up
+%     axis([0 time_data(end) -0.1 1.5])
+    torqpl.FontSize = fontSize;
+%     yticks (0:0.2:1.5)
+    %xticks (0:2:time_data(end))
+    lgd = legend('Z','Y','X','Location','southeast');
+    lgd.FontSize = fontSize-4;
+    
+    % Plot labels
+    xlabel('Time [s]', 'FontSize',fontSize);
+    ylabel('Nmm', 'FontSize',fontSize);
+    grid on
+            
+    line1 = strcat('Reaction sphere generated torque');
+    title( {strcat(line1)},'interpreter','tex','FontSize',fontSize)
     
     %% Create table with information
     textString = {...
@@ -127,16 +155,11 @@ function responsePlot(responseData, rotmOut, omegaRsOut, mechEnergyOut, mechPowe
                 ' ';...
                 ' ';...
                 ' ';...
+        sprintf('Maximum power [W]       : %5.2f', max(abs(mechPowerOut.Data)));...
                 ' ';...
-                ' ';...
-                ' ';...
-                ' ';...
-        sprintf('Maximum power [W] : %5.2f', max(mechPowerOut.Data));...
-                ' ';...
-        sprintf('Total energy [W]  : %7.2f', mechEnergyOut.Data(end));...
-                ' ';...
-                ' ';...
-                ' ';...
+        sprintf(strcat('Energy to max' ,{' '},string(char(969)),{' '},'[J]     : %5.2f'), mechEnergyOut.Data(find(mechPowerOut.Data(10:end) > 0, 1)+10));...
+                
+        sprintf(strcat('Energy to stationary [J]: %5.2f'), (mechEnergyOut.Data(end)-mechEnergyOut.Data(find(mechPowerOut.Data(10:end) > 0, 1)+10)));...
                 ' ';...
                 ' ';...
                 ' ';...
@@ -145,24 +168,39 @@ function responsePlot(responseData, rotmOut, omegaRsOut, mechEnergyOut, mechPowe
                 ' ';...
                 ' ';...
                 ' ';...
-        sprintf(strcat('Maximum ',{' '},string(char(969)),'-x [deg] : %5.2f'), min(omegaRsOut.Data(:,1)));...
+        sprintf(strcat('Maximum ',{' '},string(char(969)),'-x [Rad/s] : %5.2f'), min(omegaRsOut.Data(:,1)));...
+                
+        sprintf(strcat('Maximum ',{' '},string(char(969)),'-y [Rad/s] : %5.2f'), min(omegaRsOut.Data(:,2)));...
+                
+        sprintf(strcat('Maximum ',{' '},string(char(969)),'-z [Rad/s] : %5.2f'), min(omegaRsOut.Data(:,3)));... 
                 ' ';...
-        sprintf(strcat('Maximum ',{' '},string(char(969)),'-y [deg] : %5.2f'), min(omegaRsOut.Data(:,2)));...
                 ' ';...
-        sprintf(strcat('Maximum ',{' '},string(char(969)),'-z [deg] : %5.2f'), min(omegaRsOut.Data(:,3)))};
+                ' ';...
+                ' ';...
+                ' ';...
+                ' ';...
+                ' ';...
+        sprintf(strcat('Maximum Torque [Nmm]: %5.2f'), max(vecnorm(torqueOut.Data')));...
+                ' ';...
+        sprintf(strcat('Maximum T-x [Nmm]   : %5.2f'), max(abs((torqueOut.Data(:,1)))));...
+                
+        sprintf(strcat('Maximum T-y [Nmm]   : %5.2f'), max(abs((torqueOut.Data(:,2)))));...
+                
+        sprintf(strcat('Maximum T-z [Nmm]   : %5.2f'), max(abs((torqueOut.Data(:,3)))))};
     
     uicontrol(f,...
-                  'FontSize',   14,...
+                  'FontSize',   fontSize-2,...
                   'Units',      'normalized',...
                   'Style',      'text',...
                   'String',     textString,...
                   'FontName',   'FixedWidth',...
-                  'Position',   [2/3 0 1/3 9/10],...
+                  'Position',   [0.63 0.05 0.35 9/10],...
                   'BackgroundColor', [1 1 1])
     
     % Fullsize window
-    f.Units = 'normalized';
-    f.OuterPosition = [0 0 1 1];
+    f.Units = 'pixels';
+    displaySize = 750;
+    f.Position = [0 0 displaySize*sqrt(2) displaySize];
     
     % Fixes position of table for cleaner look
     % t.Position(3:4) = t.Extent(3:4);
