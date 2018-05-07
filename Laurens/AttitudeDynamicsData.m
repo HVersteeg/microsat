@@ -18,6 +18,13 @@ J_sphere = 0.005567928416632;	% [kg*m^2] reaction sphere moment of inertia
 s = tf('s');
 H = 1 / (J_sat(1)*s^2);
 
+%% Sample time control
+% Model predictive control sample time
+tMPC = 1;
+% PID controller sample time
+tPID = 0.1;
+
+
 
 %% 3-Axis PID controller gains
 
@@ -39,7 +46,7 @@ PID_A = struct( ...
 % pid gains for NDI model
 PID_NDI = struct( ...
     'P', 0.086943,...
-    'I', 0.001563,...
+    'I', 0 ,...
     'D', 0.9084 ...
     );
 
@@ -51,19 +58,19 @@ PID_AA = struct( ...
     );
 
 %% Euler angle setpoint timeseries
-timeA = [0];
-% timeA = [0;
-%          50;
-%          100;
-%          150;
-%          200;
-%          250];
+% timeA = [0];
+timeA = [0;
+         50;
+         100;
+         150;
+         200;
+         250];
 rng(123456); % seed random number generator for always the same 'random' values
-dataA = [0 0 0];
-% dataA = [0 0 0;
-%          60 90 180;
-%          0 0 0;
-%          70 90 270;
-%          0 0 0;
-%          60 60 60];
+% dataA = [0 0 0];
+dataA = [0 0 0;
+         60 60 60;
+         0 0 0;
+         -70 -70 -70;
+         0 0 0;
+         60 60 60]*pi/180;
 eulerSetpoints = timeseries(dataA, timeA);
