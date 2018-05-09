@@ -49,9 +49,9 @@ function responsePlot(responseData, rotmOut, omegaRsOut, mechEnergyOut, mechPowe
     end
     
     % Performance graph axis and legend set-up
-    axis([0 time_data(end) -0.1 1.5])
+    %axis([0 time_data(end) -0.1 1.5])
     rsppl.FontSize = fontSize;
-    yticks (0:0.25:1.5)
+    %yticks (0:0.25:1.5)
     %xticks (0:0.5:time_data(end))
     lgd = legend('Z','Y','X','Location','southeast');
     lgd.FontSize = fontSize-4;    
@@ -87,6 +87,15 @@ function responsePlot(responseData, rotmOut, omegaRsOut, mechEnergyOut, mechPowe
     title( {strcat(line1)},'interpreter','tex','FontSize',fontSize)
     
     %% Omega plots
+    [M,I] = max(abs(omegaRsOut.Data(:,1)));
+    max_omg_x = omegaRsOut.Data(I,1);
+    
+    [M,I] = max(abs(omegaRsOut.Data(:,2)));
+    max_omg_y = omegaRsOut.Data(I,2);
+    
+    [M,I] = max(abs(omegaRsOut.Data(:,3)));
+    max_omg_z = omegaRsOut.Data(I,3);
+    
     omegapl = axes(f, 'Units',          'normalized',...
                  'OuterPosition',    [0 1/4 2/3 2.3/10]);
              
@@ -168,11 +177,11 @@ function responsePlot(responseData, rotmOut, omegaRsOut, mechEnergyOut, mechPowe
                 ' ';...
                 ' ';...
                 ' ';...
-        sprintf(strcat('Maximum ',{' '},string(char(969)),'-x [Rad/s] : %5.2f'), min(omegaRsOut.Data(:,1)));...
+        sprintf(strcat('Maximum ',{' '},string(char(969)),'-x [Rad/s] : %5.2f'), max_omg_x);...
                 
-        sprintf(strcat('Maximum ',{' '},string(char(969)),'-y [Rad/s] : %5.2f'), min(omegaRsOut.Data(:,2)));...
+        sprintf(strcat('Maximum ',{' '},string(char(969)),'-y [Rad/s] : %5.2f'), max_omg_y);...
                 
-        sprintf(strcat('Maximum ',{' '},string(char(969)),'-z [Rad/s] : %5.2f'), min(omegaRsOut.Data(:,3)));... 
+        sprintf(strcat('Maximum ',{' '},string(char(969)),'-z [Rad/s] : %5.2f'), max_omg_z);... 
                 ' ';...
                 ' ';...
                 ' ';...
@@ -207,7 +216,7 @@ function responsePlot(responseData, rotmOut, omegaRsOut, mechEnergyOut, mechPowe
     
     % Save figure as PDF for best quality
     pause(0.1)
-    saveFolder = '../Laurens/PlotOutput/ResponsePlot';
+    saveFolder = 'PlotOutput/ResponsePlot';
     save2pdf(saveFolder,2,600)
     
 end
