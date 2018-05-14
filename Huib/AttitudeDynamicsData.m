@@ -22,7 +22,7 @@ H = 1 / (J_sat(1)*s^2);
 % Model predictive control sample time
 tMPC = 1;
 % PID controller sample time
-tPID = 0.1;
+tPID = 5;
 
 
 
@@ -60,7 +60,7 @@ PID_AA = struct( ...
 %% Euler angle setpoint timeseries
 % timeA = [0];
 timeA = [0;
-         50;
+         51;
          100;
          150;
          200;
